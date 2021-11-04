@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.11
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archi.API", "Archi.API\Archi.API.csproj", "{AC800EAE-4278-467A-B97D-1A1A3857120E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archi.Library", "Archi.Library\Archi.Library.csproj", "{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC800EAE-4278-467A-B97D-1A1A3857120E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC800EAE-4278-467A-B97D-1A1A3857120E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC800EAE-4278-467A-B97D-1A1A3857120E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC800EAE-4278-467A-B97D-1A1A3857120E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CC58853-4649-497A-B284-F41041B83F10}
+	EndGlobalSection
+EndGlobal
