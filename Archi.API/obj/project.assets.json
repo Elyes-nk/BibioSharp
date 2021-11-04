@@ -8271,14 +8271,14 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Api/Archi.Api.csproj",
-      "projectName": "Archi.Api",
-      "projectPath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Api/Archi.Api.csproj",
+      "projectUniqueName": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.API/Archi.API.csproj",
+      "projectName": "Archi.API",
+      "projectPath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.API/Archi.API.csproj",
       "packagesPath": "/Users/elyes/.nuget/packages/",
-      "outputPath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Api/obj/",
+      "outputPath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/elyes/.nuget/NuGet/NuGet.Config"
+        "/Users/elyes/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -8290,8 +8290,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj": {
-              "projectPath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj"
+            "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj": {
+              "projectPath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj"
             }
           }
         }

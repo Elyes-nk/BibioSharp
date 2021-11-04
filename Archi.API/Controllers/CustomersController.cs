@@ -23,6 +23,7 @@ namespace Archi.API.Controllers
         {
         }
 
+        /*
         // GET: api/Customers
         [HttpGet("~/getcustomer")]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
@@ -113,6 +114,7 @@ namespace Archi.API.Controllers
         {
             return _context.Customers.Any(e => e.ID == id);
         }
+                */
 
         private string GetDebuggerDisplay()
         {

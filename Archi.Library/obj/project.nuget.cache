@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Fl/IVAMnDW8jVnA+ZLz14mwsA4TtuyDGt/exF3oYdq+EypUBp4tZj5oM1nLCaUmXAR7RbIp/1uvH39IvcA/fqA==",
+  "dgSpecHash": "8UWnTZZls6yofmb3Or16ckJc1oAArL1aw9KWfLqhmSrmzHCRbNkB5wKKnYbKiHEoSE+D+yYiuJHI8hezKgbVmQ==",
   "success": true,
-  "projectFilePath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj",
+  "projectFilePath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj",
   "expectedPackageFiles": [
     "/Users/elyes/.nuget/packages/microsoft.aspnetcore.authentication.abstractions/2.2.0/microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "/Users/elyes/.nuget/packages/microsoft.aspnetcore.authentication.core/2.2.0/microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",

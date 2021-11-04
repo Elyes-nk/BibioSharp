@@ -21,7 +21,7 @@ namespace ArchiAPI.Controllers
         public PizzaController(ArchiDbContext c) : base(c)
         {
         }
-
+        /*
         // GET: api/Pizzas
         [HttpGet("~/getpizza")]
         public async Task<ActionResult<IEnumerable<Pizza>>> GetPizzas()
@@ -104,6 +104,7 @@ namespace ArchiAPI.Controllers
         {
             return _context.Pizza.Any(e => e.ID == id);
         }
+        */
 
         private string GetDebuggerDisplay()
         {

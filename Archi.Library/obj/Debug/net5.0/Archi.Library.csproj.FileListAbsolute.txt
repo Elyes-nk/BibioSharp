@@ -22,3 +22,15 @@
 /Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/obj/Debug/net5.0/Archi.Library.dll
 /Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/obj/Debug/net5.0/ref/Archi.Library.dll
 /Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/obj/Debug/net5.0/Archi.Library.pdb
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/bin/Debug/net5.0/Archi.Library.deps.json
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/bin/Debug/net5.0/Archi.Library.dll
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/bin/Debug/net5.0/ref/Archi.Library.dll
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/bin/Debug/net5.0/Archi.Library.pdb
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.csproj.AssemblyReference.cache
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.GeneratedMSBuildEditorConfig.editorconfig
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.AssemblyInfoInputs.cache
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.AssemblyInfo.cs
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.csproj.CoreCompileInputs.cache
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.dll
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/ref/Archi.Library.dll
+/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/Debug/net5.0/Archi.Library.pdb

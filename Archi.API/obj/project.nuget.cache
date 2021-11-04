@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OcKZYhG0zWpF82Wu7GnXofien3ynSDIfHUFciENCTrr+7N2lm3rrOjFUNjJq5kAfgKMjdCeHbK+wtK6+AnvJNA==",
+  "dgSpecHash": "E4xyse9eefVzmGVkSeKkHVU6tCaxZBVrgHEs2ksWyBfrAuqEpybY913WtGvKvnuVyz2ihjsKbJMcCPG0IV6wNA==",
   "success": true,
-  "projectFilePath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Api/Archi.Api.csproj",
+  "projectFilePath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.API/Archi.API.csproj",
   "expectedPackageFiles": [
     "/Users/elyes/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/Users/elyes/.nuget/packages/microsoft.aspnetcore.authentication.abstractions/2.2.0/microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj": {}
+    "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj": {}
   },
   "projects": {
-    "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj": {
+    "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj",
+        "projectUniqueName": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj",
         "projectName": "Archi.Library",
-        "projectPath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/Archi.Library.csproj",
+        "projectPath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/Archi.Library.csproj",
         "packagesPath": "/Users/elyes/.nuget/packages/",
-        "outputPath": "/Users/elyes/Documents/GitHub/ArchiLog/Archi.Library/obj/",
+        "outputPath": "/Users/elyes/Documents/GitHub/ArchiLogExam/Archi.Library/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/elyes/.nuget/NuGet/NuGet.Config"
+          "/Users/elyes/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
