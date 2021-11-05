@@ -23,14 +23,41 @@ namespace Archi.Library.Controllers
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll()
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search)
         {
-            return await _context.Set<TModel>().Where(x => x.Active == true).ToListAsync();
-            //return await _context.Pizzas.Where(x => x.Active == true).ToListAsync();
+            var contents = from m in _context.Set<TModel>()
+                         select m;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                contents = contents.Where(s => s.Name.Contains(search));
+            }
+            return await contents.ToListAsync();
 
             // var query = _context.Customers.AsQueryable<Customer>();
             //query = query.Take(18);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

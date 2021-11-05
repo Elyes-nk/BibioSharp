@@ -9,6 +9,7 @@ namespace Archi.Library.Models
     public abstract class ModelBase
     {
         public int ID { get; set; }
+        public string Name { get; set; }
         public bool Active { get; set; }
     }
 }

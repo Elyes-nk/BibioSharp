@@ -13,7 +13,7 @@ namespace Archi.API.Model
     {
         //public int ID { get; set; }
         [Required]
-        public string Name { get; set; }
+        //public string Name { get; set; }
         public decimal Price { get; set; }
         public string Topping { get; set; }
     }
