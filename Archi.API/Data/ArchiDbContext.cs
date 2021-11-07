@@ -62,7 +62,7 @@ namespace Archi.API.Data
 
         public DbSet<Customer> Customers { get; set; }
 
-        public DbSet<Pizza> Pizza { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
 
