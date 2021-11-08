@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace Archi.Library.Controllers
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, String range)
         {
             var contents = from m in _context.Set<TModel>()
                          select m;
@@ -32,10 +33,27 @@ namespace Archi.Library.Controllers
             {
                 contents = contents.Where(s => s.Name.Contains(search));
             }
+            if (!String.IsNullOrEmpty(range))
+            {
+
+            }
             return await contents.ToListAsync();
 
             // var query = _context.Customers.AsQueryable<Customer>();
             //query = query.Take(18);
+
+
+            //// LAMBDA: x => x.[PropertyName]
+            //var parameter = Expression.Parameter(typeof(TModel), "x");
+            //Expression property = Expression.Property(parameter, "Name");
+            //var lambda = Expression.Lambda(property, parameter);
+
+            //// REFLECTION: source.OrderBy(x => x.Property)
+            //var orderByMethod = typeof(Queryable).GetMethods().First(x => x.Name == "OrderBy" && x.GetParameters().Length == 2);
+            //var orderByGeneric = orderByMethod.MakeGenericMethod(typeof(TModel), property.Type);
+            //var result = orderByGeneric.Invoke(null, new object[] { contents, lambda });
+
+            //return await ((IOrderedQueryable<Customer>)result).ToListAsync();
         }
 
 
