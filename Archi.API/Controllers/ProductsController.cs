@@ -11,9 +11,9 @@ namespace ArchiAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : BaseController<ArchiDbContext, Product>
+    public class ProductsController : BaseController<ArchiDbContext, IUriService, Product>
     {
-        public ProductsController(ArchiDbContext c) : base(c)
+        public ProductsController(ArchiDbContext c, IUriService u) : base(c, u)
         {
         }
     }

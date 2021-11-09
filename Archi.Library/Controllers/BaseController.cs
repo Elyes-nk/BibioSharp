@@ -1,4 +1,7 @@
-﻿using Archi.Library.Models;
+﻿using Archi.Library.Filter;
+using Archi.Library.Helpers;
+using Archi.Library.Models;
+using Archi.Library.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,33 +14,47 @@ using System.Threading.Tasks;
 
 namespace Archi.Library.Controllers
 {
-    public abstract class BaseController<TContext, TModel> : ControllerBase where TContext : DbContext where TModel : ModelBase
+    public abstract class BaseController<TContext, TUriService, TModel> : ControllerBase where TContext : DbContext where TUriService : IUriService where TModel : ModelBase
     {
         protected readonly TContext _context;
+        protected readonly TUriService _uriService;
 
-        public BaseController(TContext context)
+
+        public BaseController(TContext context, TUriService uriService)
         {
             _context = context;
+            _uriService = uriService;
         }
-
 
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, String range)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, [FromQuery] PaginationFilter filter)
         {
-            var contents = from m in _context.Set<TModel>()
-                         select m;
+            var contents = from m in _context.Set<TModel>() select m;
 
             if (!String.IsNullOrEmpty(search))
             {
                 contents = contents.Where(s => s.Name.Contains(search));
             }
-            if (!String.IsNullOrEmpty(range))
-            {
 
-            }
-            return await contents.ToListAsync();
+            var route = Request.Path.Value;
+
+            var validFilter = new PaginationFilter(filter.Range, filter.PageSize);
+
+            var pagedData = await contents
+                    .Skip((validFilter.Range - 1) * validFilter.PageSize)
+                    .Take(validFilter.PageSize)
+                    .ToListAsync();
+
+            var totalRecords= await contents.CountAsync();
+
+            var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, validFilter, totalRecords, _uriService, route);
+
+            return Ok(pagedResponse);
+
+
+            //return Ok(pagedData);
 
             // var query = _context.Customers.AsQueryable<Customer>();
             //query = query.Take(18);
@@ -90,7 +107,9 @@ namespace Archi.Library.Controllers
                 return NotFound();
             }
 
-            return content;
+            //return content;
+            return Ok(new Response<TModel>(content));
+
         }
 
         // PUT: api/Customers/5

@@ -8,6 +8,10 @@
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="Microsoft.AspNetCore.Mvc.Core" />
     <None Remove="Controllers\" />
+    <None Remove="Wrappers\" />
+    <None Remove="Filter\" />
+    <None Remove="Services\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
@@ -15,5 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Wrappers\" />
+    <Folder Include="Filter\" />
+    <Folder Include="Services\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
