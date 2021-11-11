@@ -29,48 +29,41 @@ namespace Archi.Library.Controllers
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, [FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, String range)
         {
+            //search
             var contents = from m in _context.Set<TModel>() select m;
-
             if (!String.IsNullOrEmpty(search))
             {
                 contents = contents.Where(s => s.Name.Contains(search));
             }
 
+
+            //pagination
+            var totalRecords = await contents.CountAsync();
+            if (String.IsNullOrEmpty(range))
+            {
+                range = 0 + "-" + totalRecords;
+            }
             var route = Request.Path.Value;
-
-            var validFilter = new PaginationFilter(filter.Range, filter.PageSize);
-
+            //split range into page and pagesize
+            //TODO function for spliting range
+            var tab = range.Split('-');
+            var start = int.Parse(tab[0]);
+            var end = int.Parse(tab[1]);
+            if (end > totalRecords)
+            {
+                end = totalRecords;
+            }
+            var pageSize = (end - start);
+            var page = 1 + (start / pageSize);
+            var validFilter = new PaginationFilter(page, pageSize);
             var pagedData = await contents
-                    .Skip((validFilter.Range - 1) * validFilter.PageSize)
+                    .Skip((validFilter.Page - 1) * validFilter.PageSize)
                     .Take(validFilter.PageSize)
                     .ToListAsync();
-
-            var totalRecords= await contents.CountAsync();
-
-            var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, validFilter, totalRecords, _uriService, route);
-
+            var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route);
             return Ok(pagedResponse);
-
-
-            //return Ok(pagedData);
-
-            // var query = _context.Customers.AsQueryable<Customer>();
-            //query = query.Take(18);
-
-
-            //// LAMBDA: x => x.[PropertyName]
-            //var parameter = Expression.Parameter(typeof(TModel), "x");
-            //Expression property = Expression.Property(parameter, "Name");
-            //var lambda = Expression.Lambda(property, parameter);
-
-            //// REFLECTION: source.OrderBy(x => x.Property)
-            //var orderByMethod = typeof(Queryable).GetMethods().First(x => x.Name == "OrderBy" && x.GetParameters().Length == 2);
-            //var orderByGeneric = orderByMethod.MakeGenericMethod(typeof(TModel), property.Type);
-            //var result = orderByGeneric.Invoke(null, new object[] { contents, lambda });
-
-            //return await ((IOrderedQueryable<Customer>)result).ToListAsync();
         }
 
 

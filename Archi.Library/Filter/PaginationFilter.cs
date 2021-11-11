@@ -3,17 +3,18 @@ namespace Archi.Library.Filter
 {
     public class PaginationFilter
     {
-        public int Range { get; set; }
+        public int Page { get; set; }
         public int PageSize { get; set; }
+
         public PaginationFilter()
         {
-            this.Range = 1;
+            this.Page = 0;
             this.PageSize = 7;
         }
-        public PaginationFilter(int range, int pageSize)
+        public PaginationFilter(int page, int pageSize)
         {
-            this.Range = range < 1 ? 1 : range;
-            this.PageSize = pageSize > 7 ? 7 : pageSize;
+            this.Page = page < 0 ? 0 : page;
+            this.PageSize = pageSize > 50 ? 50 : pageSize;
         }
     }
 }
