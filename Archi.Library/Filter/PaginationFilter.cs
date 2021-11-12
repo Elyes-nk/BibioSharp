@@ -8,12 +8,12 @@ namespace Archi.Library.Filter
 
         public PaginationFilter()
         {
-            this.Page = 0;
+            this.Page = 1;
             this.PageSize = 7;
         }
         public PaginationFilter(int page, int pageSize)
         {
-            this.Page = page < 0 ? 0 : page;
+            this.Page = page < 1 ? 1 : page;
             this.PageSize = pageSize > 50 ? 50 : pageSize;
         }
     }

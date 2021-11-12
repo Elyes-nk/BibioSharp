@@ -20,39 +20,52 @@ namespace Archi.Library.Helpers
             var tab = range.Split('-');
             var start = int.Parse(tab[0]);
             var end = int.Parse(tab[1]);
-            var pageSize = (end - start);
+            if (start == 0)
+            {
+                start++;
+                end++;
+            }
+            if (end > totalRecords)
+            {
+                end = totalRecords;
+            }
+            var pageSize = (end - start + 1);
+
+
+            //rel = "first"
+            var firstStart = 1;
+            var firstEnd = (firstStart + pageSize - 1);
+            var first = firstStart + "-" + firstEnd;
+            reponse.First = uriService.GetPageUri(first, route);
+
 
             //rel = "next"
-            var nextStart = (1 + start + pageSize);
-            var nextEnd = (1 + end + pageSize);
+            var nextStart = (start + pageSize);
+            var nextEnd = (end + pageSize);
             if (nextEnd > totalRecords)
             {
                 nextEnd = totalRecords;
             }
             string next = nextStart+ "-" +nextEnd;
             reponse.Next =
-                nextStart >= 0 && nextStart < totalRecords
+                nextStart >= 1 && nextStart <= totalRecords
                 ? uriService.GetPageUri(next, route)
                 : null;
 
+
             //rel = "prev"
-            var prevStart = (start - pageSize - 1);
-            var prevEnd = (end - pageSize - 1);
+            var prevStart = (start - pageSize);
+            var prevEnd = (end - pageSize);
             var prev = prevStart + "-" + prevEnd;
             reponse.Prev =
-                prevStart - 1 >= 0 && prevEnd <= totalRecords
+                prevStart - 1 >= 1 && prevEnd <= totalRecords
                 ? uriService.GetPageUri(prev, route)
                 : null;
 
-            //rel = "first"
-            var firstStart = 0;
-            var firstEnd = (firstStart + pageSize);
-            var first = firstStart + "-" + firstEnd;
-            reponse.First = uriService.GetPageUri(first, route);
 
             //rel = "last"
-            var lastStart = (totalRecords - pageSize);
-            var last = lastStart + "-" + totalRecords;
+            var lastStart = pageSize * (roundedTotalPages - 1) + 1;
+            string last = lastStart + "-" + totalRecords;       
             reponse.Last = uriService.GetPageUri(last, route);
 
 

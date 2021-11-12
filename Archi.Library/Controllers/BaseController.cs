@@ -43,7 +43,7 @@ namespace Archi.Library.Controllers
             var totalRecords = await contents.CountAsync();
             if (String.IsNullOrEmpty(range))
             {
-                range = 0 + "-" + totalRecords;
+                range = 1 + "-" + totalRecords;
             }
             var route = Request.Path.Value;
             //split range into page and pagesize
@@ -51,13 +51,19 @@ namespace Archi.Library.Controllers
             var tab = range.Split('-');
             var start = int.Parse(tab[0]);
             var end = int.Parse(tab[1]);
+            if (start == 0)
+            {
+                start++;
+                end++;
+            }
             if (end > totalRecords)
             {
                 end = totalRecords;
             }
-            var pageSize = (end - start);
+            var pageSize = (1 + end - start);
             var page = 1 + (start / pageSize);
             var validFilter = new PaginationFilter(page, pageSize);
+      
             var pagedData = await contents
                     .Skip((validFilter.Page - 1) * validFilter.PageSize)
                     .Take(validFilter.PageSize)

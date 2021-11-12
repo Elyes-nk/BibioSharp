@@ -16,7 +16,7 @@ namespace Archi.Library.Models
         [StringLength(60, MinimumLength = 3)]
         public string Name { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
+        [RegularExpression(@"^[a-zA-Z\s]*$")]
         [Required]
         [StringLength(30)]
         public string Type { get; set; }
