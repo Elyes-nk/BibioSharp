@@ -1,25 +1,25 @@
 # ArchiLogTp
 
-#Projet Architecture logiciel
+# Projet Architecture logiciel
 
 Application API web en micro services. Elle utilise une bibliothèque qui automatise les standards d'une API REST.
 
-#La base
+# La base
 Librairie impléte par défaut un CRUD (Create, Read, Update, Delete), un tri, une pagination et un rendu partiel. Lors du développement de l'API à partir de la librairie, le développeur crée un minimum de fichier et de ligne de code pour implémenter le CRUD.
 
-#Pagination
+# Pagination
 La pagination en utilisant le paramètre de requête ?range=0-25 et les Header standards HTTP pour la réponse: Content-Range & Accept-Range. Voici comment les links sont présent dans le header de retour: Link: https://xxxxx.com/catalog/v1/products/orders?range=0-7; rel="first", https://xxxxx.com/catalog/v1/products/orders?range=40-47; rel="prev", https://xxxxx.com/catalog/v1/products/orders?range=56-64; rel="next", https://api.xxxxx.com/catalog/v1/products/orders?range=968-975; rel="last"
 
 Voici ce que contient également le header dans le cas d'une pagination: Content-Range: 0-47/48 Accept-Range: product 50
 
-#Tris
+# Tris
 Le tri du résultat d’un appel sur une collection de ressources passe par deux principaux paramètres :
 
 sort : contient les noms des attributs, séparés par une virgule, sur lesquels effectuer le trie. desc : par défaut le tri est ascendant (ou croissant), afin de l’obtenir de façon descendant (ou décroissant), il suffit d’ajouter ce paramètre (sans valeur par défaut). On voudra dans certains cas spécifier quels attributs doivent être traités de façon ascendant ou descendant, on mettra alors dans ce paramètre la liste des attributs descendants, les autres seront donc par défaut ascendants.
 
 Le tri est sous la forme suivante: https://xxxxx.com/catalog/v1/products?asc=rating&desc=name
 
-#Filtres
+# Filtres
 La librairie inclus un filtre générique sous la forme suivante: http://xxxxx.com/catalog/v1/products?type=pizza,pates&rating=4,5&days=sunday Sur une chaine de caratères:
 
 l'utilisateur peut rechercher une valeur fixe (type=pizza)
