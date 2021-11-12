@@ -39,11 +39,11 @@ l'utilisateur peut rechercher des fourchettes de valeurs, ex les produits créé
 l'utilisateur peut rechercher des valeurs inférieurs ou égal, ex les produits créés avant le 05/05/2020 (createdat=[,05-05-2020])
 l'utilisateur peut rechercher des valeurs supérieurs ou égal, ex les produits créés après le 04/04/2020 (createdat=[04-04-2020,])
 
-Recherche
+# Recherche
 La librairie inclus une recherche générique sous la forme suivante: http://xxxxx/catalog/v1/products/search?name=*napoli*&type=pizza,pate&sort=rating,name
 
-Base de données
+# Base de données
 La base de données de dev est hébergée directement sur une instance Azure.
 
-Web API
+# Web API
 La doc de l'API est avec SwaggerUI aide.
