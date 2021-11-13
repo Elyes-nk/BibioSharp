@@ -1,4 +1,5 @@
-﻿using Archi.Library.Filter;
+﻿using APILibrary.Core.Extensions;
+using Archi.Library.Filter;
 using Archi.Library.Helpers;
 using Archi.Library.Models;
 using Archi.Library.Wrappers;
@@ -29,7 +30,7 @@ namespace Archi.Library.Controllers
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, String range)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, String asc, String desc, String type, String rating, String date, String range)
         {
             //search
             var contents = from m in _context.Set<TModel>() select m;
@@ -37,6 +38,19 @@ namespace Archi.Library.Controllers
             {
                 contents = contents.Where(s => s.Name.Contains(search));
             }
+
+            //tris
+            if (!string.IsNullOrEmpty(asc) || !string.IsNullOrEmpty(desc))
+            {
+                contents = contents.OrderThis(asc, desc);
+            }
+
+            //filter 
+            if (!string.IsNullOrEmpty(type) || !string.IsNullOrEmpty(rating) || !string.IsNullOrEmpty(date))
+            {
+                contents = contents.FilterThis(type, rating, date);
+            }
+
 
 
             //pagination
@@ -71,20 +85,6 @@ namespace Archi.Library.Controllers
             var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route);
             return Ok(pagedResponse);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
