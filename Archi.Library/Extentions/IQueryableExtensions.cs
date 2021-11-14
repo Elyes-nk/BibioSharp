@@ -98,25 +98,35 @@ namespace APILibrary.Core.Extensions
 
 
 
-     
-                if (!string.IsNullOrEmpty(type))
+            if (!string.IsNullOrEmpty(type))
+            {
+
+                var propInfo = typeof(TModel).GetProperty("Type", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                var fieldName = propInfo.Name;
+
+                if (typeAndType.IsMatch(type))
                 {
-                    var propInfo = typeof(TModel).GetProperty("Type", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
-                    var fieldName = propInfo.Name;
-                    if (typeAndType.IsMatch(rating))
-                    {
-
-                    }
-                    else
-                    {      
-                        var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, type);
-                        contents = contents.Where(predicate);
-                    }
+                    //done
+                    string[] types = type.Split(',');
+                    string one = types[0];
+                    string two = types[1];
+                    var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, one);
+                    var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, two);
+                    var contentsOne = contents.Where(predicateOne);
+                    var contentsTwo = contents.Where(predicateTwo);
+                    contents = contentsOne.Concat(contentsTwo);
                 }
+                else
+                {
+                    //done
+                    var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, type);
+                    contents = contents.Where(predicate);
+                }
+            }
 
 
 
-                if (!string.IsNullOrEmpty(rating))
+            if (!string.IsNullOrEmpty(rating))
                 {
                     var propInfo = typeof(TModel).GetProperty("Rating", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
                     var fieldName = propInfo.Name;
@@ -130,7 +140,16 @@ namespace APILibrary.Core.Extensions
                     }
                     else if (ratingAndRating.IsMatch(rating))
                     {
-                        
+                        //done
+                        string[] ratings = rating.Split(',');
+                        string one = ratings[0];
+                        string two = ratings[1];
+                        var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(one));
+                        var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(two));
+                        var contentsOne = contents.Where(predicateOne);
+                        var contentsTwo = contents.Where(predicateTwo);
+                        contents = contentsOne.Concat(contentsTwo);
+
                     }
                     else if (ratingToEnd.IsMatch(rating))
                     {
@@ -170,7 +189,15 @@ namespace APILibrary.Core.Extensions
                     }
                     else if (dateAndDate.IsMatch(date))
                     {
-
+                        //done
+                        string[] dates = date.Split(',');
+                        string one = dates[0];
+                        string two = dates[1];
+                        var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(one));
+                        var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(two));
+                        var contentsOne = contents.Where(predicateOne);
+                        var contentsTwo = contents.Where(predicateTwo);
+                        contents = contentsOne.Concat(contentsTwo);
                     }
                     else if (dateToEnd.IsMatch(date))
                     {
@@ -186,6 +213,7 @@ namespace APILibrary.Core.Extensions
                     }
                     else
                     {
+                        //done
                         var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDateTime(date));
                         contents = contents.Where(predicate);
                     }

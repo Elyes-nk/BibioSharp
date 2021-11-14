@@ -30,11 +30,11 @@ namespace Archi.Library.Controllers
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(String search, String asc, String desc, String type, String rating, String date, String range)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string search, string asc, string desc, string type, string rating, string date, string range)
         {
             //search
             var contents = from m in _context.Set<TModel>() select m;
-            if (!String.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(search))
             {
                 contents = contents.Where(s => s.Name.Contains(search));
             }
