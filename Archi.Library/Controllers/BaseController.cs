@@ -30,7 +30,7 @@ namespace Archi.Library.Controllers
 
         // GET: api/{model}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string search, string asc, string desc, string type, string rating, string date, string range)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string search, string asc, string desc, string type, string rating, String date, string range)
         {
             //search
             var contents = from m in _context.Set<TModel>() select m;

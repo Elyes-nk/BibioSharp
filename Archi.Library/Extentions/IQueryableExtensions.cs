@@ -134,8 +134,8 @@ namespace APILibrary.Core.Extensions
                     {
                         var start = rating[1].ToString();
                         var end = rating[rating.Length - 2].ToString();
-                        var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, Convert.ToDecimal(start));
-                        var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, Convert.ToDecimal(end));
+                        var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, Convert.ToInt32(start));
+                        var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, Convert.ToInt32(end));
                         contents = contents.Where(predicateStart).Where(predicateEnd);
                     }
                     else if (ratingAndRating.IsMatch(rating))
@@ -144,8 +144,8 @@ namespace APILibrary.Core.Extensions
                         string[] ratings = rating.Split(',');
                         string one = ratings[0];
                         string two = ratings[1];
-                        var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(one));
-                        var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(two));
+                        var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToInt32(one));
+                        var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToInt32(two));
                         var contentsOne = contents.Where(predicateOne);
                         var contentsTwo = contents.Where(predicateTwo);
                         contents = contentsOne.Concat(contentsTwo);
@@ -154,18 +154,19 @@ namespace APILibrary.Core.Extensions
                     else if (ratingToEnd.IsMatch(rating))
                     {
                         var start = rating[1].ToString();
-                        var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, Convert.ToDecimal(start));
+                        var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, Convert.ToInt32(start));
                         contents = contents.Where(predicateStart);
                     }
                     else if (startToRating.IsMatch(rating))
                     {
                         var end = rating[rating.Length - 2].ToString();
-                        var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, Convert.ToDecimal(end));
+                        var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, Convert.ToInt32(end));
                         contents = contents.Where(predicateEnd);
                     }
                     else
                     {
-                        var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(rating));
+                        //done
+                        var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToInt32(rating));
                         contents = contents.Where(predicate);
                     }
                 }
@@ -176,9 +177,9 @@ namespace APILibrary.Core.Extensions
 
                 if (!string.IsNullOrEmpty(date))
                 {
-                    var propInfo = typeof(TModel).GetProperty("CreateAt", BindingFlags.Public |
-                   BindingFlags.IgnoreCase | BindingFlags.Instance);
+                    var propInfo = typeof(TModel).GetProperty("Date", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
                     var fieldName = propInfo.Name;
+
                     if (dateToDate.IsMatch(date))
                     {
                         var start = date.Substring(1, 10);
@@ -189,10 +190,10 @@ namespace APILibrary.Core.Extensions
                     }
                     else if (dateAndDate.IsMatch(date))
                     {
-                        //done
+                        //
                         string[] dates = date.Split(',');
-                        string one = dates[0];
-                        string two = dates[1];
+                        string one = dates[0].Substring(0, 10);
+                        string two = dates[1].Substring(0,10);
                         var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(one));
                         var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(two));
                         var contentsOne = contents.Where(predicateOne);
@@ -213,8 +214,9 @@ namespace APILibrary.Core.Extensions
                     }
                     else
                     {
-                        //done
-                        var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDateTime(date));
+                        //
+                        var dateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+                    var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dateTime);
                         contents = contents.Where(predicate);
                     }
                 }
