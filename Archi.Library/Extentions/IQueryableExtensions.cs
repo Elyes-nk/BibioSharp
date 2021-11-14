@@ -190,12 +190,20 @@ namespace APILibrary.Core.Extensions
                     }
                     else if (dateAndDate.IsMatch(date))
                     {
-                        //
+                        //done
                         string[] dates = date.Split(',');
                         string one = dates[0].Substring(0, 10);
                         string two = dates[1].Substring(0,10);
-                        var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(one));
-                        var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToDecimal(two));
+
+                        string dateTimeOne = one + "T00:00:00";
+                        DateTime dtOne = DateTime.ParseExact(dateTimeOne, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+
+                        string dateTimeTwo = two + "T00:00:00";
+                        DateTime dtTwo = DateTime.ParseExact(dateTimeTwo, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+
+                        var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dtOne);
+                        var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dtTwo);
+
                         var contentsOne = contents.Where(predicateOne);
                         var contentsTwo = contents.Where(predicateTwo);
                         contents = contentsOne.Concat(contentsTwo);
@@ -214,9 +222,10 @@ namespace APILibrary.Core.Extensions
                     }
                     else
                     {
-                        //
-                        var dateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
-                    var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dateTime);
+                        //done
+                        string dateTime = date+"T00:00:00";
+                        DateTime dt = DateTime.ParseExact(dateTime, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+                        var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dt);
                         contents = contents.Where(predicate);
                     }
                 }
