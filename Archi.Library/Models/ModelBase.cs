@@ -32,7 +32,7 @@ namespace Archi.Library.Models
             get => _rating;
             set
             {
-                if ((value > 0) && (value < 10))
+                if ((value > 0) && (value < 5))
                 {
                     _rating = value;
                 }
