@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archi.API", "Archi.API\Arch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archi.Library", "Archi.Library\Archi.Library.csproj", "{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archi.LibraryTests", "Archi.LibraryTests\Archi.LibraryTests.csproj", "{345963CE-2B13-4A81-9FF6-F0F60AA64C42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA7EE191-C6C5-4060-8097-22BBD4BC6D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{345963CE-2B13-4A81-9FF6-F0F60AA64C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{345963CE-2B13-4A81-9FF6-F0F60AA64C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{345963CE-2B13-4A81-9FF6-F0F60AA64C42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{345963CE-2B13-4A81-9FF6-F0F60AA64C42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
