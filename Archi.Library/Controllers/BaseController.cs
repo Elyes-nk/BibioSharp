@@ -103,6 +103,10 @@ namespace Archi.Library.Controllers
 
 
 
+
+
+       
+
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TModel>> GetContent(int id)
@@ -184,5 +188,68 @@ namespace Archi.Library.Controllers
         {
             return _context.Set<TModel>().Any(e => e.ID == id);
         }
+
+        ////TODO
+        //[Route("search")]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //[HttpGet]
+        //public virtual async Task<ActionResult<IEnumerable<dynamic>>> SearchAsync([FromQuery] string name)
+        //{
+        //    var query = _context.Set<TModel>().AsQueryable();
+
+        //    if (!string.IsNullOrWhiteSpace(name))
+        //    {
+        //        query = query.SearchByName(name);
+        //    }
+        //    return Ok(ToJsonList(await query.ToListAsync()));
+        //}
+
+
+        //protected IEnumerable<dynamic> ToJsonList(IEnumerable<dynamic> tab)
+        //{
+        //    var tabNew = tab.Select((x) =>
+        //    {
+        //        return ToJson(x);
+        //    });
+        //    return tabNew;
+        //}
+
+        //protected dynamic ToJson(dynamic item)
+        //{
+        //    var expo = new ExpandoObject() as IDictionary<string, object>;
+
+        //    var collectionType = typeof(TModel);
+
+        //    IDictionary<string, object> dico = item as IDictionary<string, object>;
+        //    if (dico != null)
+        //    {
+        //        foreach (var propDyn in dico)
+        //        {
+        //            var propInTModel = collectionType.GetProperty(propDyn.Key, BindingFlags.Public |
+        //                    BindingFlags.IgnoreCase | BindingFlags.Instance);
+
+        //            var isPresentAttribute = propInTModel.CustomAttributes
+        //            .Any(x => x.AttributeType == typeof(NotJsonAttribute));
+
+        //            if (!isPresentAttribute)
+        //                expo.Add(propDyn.Key, propDyn.Value);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        foreach (var prop in collectionType.GetProperties())
+        //        {
+        //            var isPresentAttribute = prop.CustomAttributes
+        //            .Any(x => x.AttributeType == typeof(NotJsonAttribute));
+
+        //            if (!isPresentAttribute)
+        //                expo.Add(prop.Name, prop.GetValue(item));
+        //        }
+        //    }
+        //    return expo;
+        //}
+
+
     }
 }
