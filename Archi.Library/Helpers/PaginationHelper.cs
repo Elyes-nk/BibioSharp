@@ -15,7 +15,6 @@ namespace Archi.Library.Helpers
             int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
 
             //TODO function for spliting range
-
             //split range
             var tab = range.Split('-');
             var start = int.Parse(tab[0]);

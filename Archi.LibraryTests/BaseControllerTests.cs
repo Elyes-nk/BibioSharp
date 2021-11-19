@@ -4,31 +4,28 @@ using System.Threading.Tasks;
 using APILibrary.Test.Mock;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using ArchiAPI.Controllers;
 using System;
+using Archi.Library.Controllers;
+using ArchiAPI.Controllers;
+using Archi.LibraryTests.Mock;
 
 namespace Archi.LibraryTests
 {
     public class Tests
     {
-
         private MockDbContext _contextSub;
-        private IUriService _uriService;
+        private MockUriService _uriService;
         private ProductsController _controllerP;
 
-        //TODO fix uri 
         [SetUp]
         public void Setup()
         {
-   
-            var uri = _uriService.GetPageUri("", "");
             _contextSub = MockDbContext.GetDbContext();
-            _controllerP = new ProductsController(_contextSub, uri);
+            _controllerP = new ProductsController(_contextSub, _uriService);
         }
 
-
         [Test]
-        public async Task Test1()
+        public async Task GetAll()
         {
             var actionResult = await _controllerP.GetAll("", "", "", "", "", "", "");
             var result = actionResult.Result as ObjectResult;

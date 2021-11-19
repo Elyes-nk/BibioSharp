@@ -21,6 +21,7 @@
     <Folder Include="Mock\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Archi.Library\Archi.Library.csproj" />
     <ProjectReference Include="..\Archi.API\Archi.API.csproj" />
   </ItemGroup>
 </Project>

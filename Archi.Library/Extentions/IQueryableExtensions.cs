@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
 using Archi.Library.Models;
+using APILibrary.Core.Attributes;
 
 namespace APILibrary.Core.Extensions
 {
@@ -27,7 +28,52 @@ namespace APILibrary.Core.Extensions
             Any
         }
 
-//--------------------------------------------------------------------tris-------------------------------------------------------------------------------------------------------------
+        //----------------------------------------------------------recherche------------------------------------------------------------------------------------------------------------------------
+
+        public static IQueryable<TModel> SearchThis<TModel>(this IQueryable<TModel> contents, string search ) where TModel : ModelBase
+        {
+            Regex propNameAndsearchName = new(@"\b\=\b");
+
+            IQueryable<TModel> contentSearched = null;
+            if (!string.IsNullOrEmpty(search))
+            {
+                var tabs = search.Split(',');
+                foreach(var tab in tabs)
+                {
+                    if (propNameAndsearchName.IsMatch(tab))
+                    {
+                        string[] types = search.Split('=');
+                        string propName = types[0];
+                        string searchName = types[1];
+
+                        //var propInfo = typeof(TModel).GetProperty(propName, BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                        //var fieldName = propInfo.Name;
+                        var predicate = GetCriteriaWhere<TModel>(propName, OperationExpression.Contains, searchName);
+                        var contentsSearch = contents.Where(predicate);
+                        if (contentSearched == null)
+                        {
+                            contentSearched = contentsSearch;
+                        }
+                        else
+                        {
+                            contentSearched = contentSearched.Concat(contentsSearch);
+                        }
+                        contents = contents.Intersect(contentSearched);
+                    }
+                }
+            }
+            return contents;
+        }
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+        //--------------------------------------------------------------------tris-------------------------------------------------------------------------------------------------------------
         public static IQueryable<TModel> OrderThis<TModel>(this IQueryable<TModel> contents, string asc, string desc) where TModel : ModelBase
         {
             if (string.IsNullOrEmpty(desc))

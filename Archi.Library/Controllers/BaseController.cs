@@ -1,4 +1,5 @@
-﻿using APILibrary.Core.Extensions;
+﻿using APILibrary.Core.Attributes;
+using APILibrary.Core.Extensions;
 using Archi.Library.Filter;
 using Archi.Library.Helpers;
 using Archi.Library.Models;
@@ -7,8 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,15 +33,19 @@ namespace Archi.Library.Controllers
 
 
         // GET: api/{model}
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string search, string asc, string desc, string type, string rating, String date, string range)
         {
-            //search
             var contents = from m in _context.Set<TModel>() select m;
+
+            //search
             if (!string.IsNullOrEmpty(search))
             {
-                contents = contents.Where(s => s.Name.Contains(search));
+                contents = contents.SearchThis(search);
             }
+
+
 
             //tris
             if (!string.IsNullOrEmpty(asc) || !string.IsNullOrEmpty(desc))
@@ -53,45 +61,45 @@ namespace Archi.Library.Controllers
 
 
 
-            //pagination
             var totalRecords = await contents.CountAsync();
-            if (String.IsNullOrEmpty(range))
+            if (totalRecords == 0)
             {
-                range = 1 + "-" + totalRecords;
+                return NotFound();
             }
-            var route = Request.Path.Value;
-            //split range into page and pagesize
-            //TODO function for spliting range
-            var tab = range.Split('-');
-            var start = int.Parse(tab[0]);
-            var end = int.Parse(tab[1]);
-            if (start == 0)
+            else
             {
-                start++;
-                end++;
-            }
-            if (end > totalRecords)
-            {
-                end = totalRecords;
-            }
-            var pageSize = (1 + end - start);
-            var page = 1 + (start / pageSize);
-            var validFilter = new PaginationFilter(page, pageSize);
+                //pagination
+                if (String.IsNullOrEmpty(range))
+                {
+                    range = 1 + "-" + totalRecords;
+                }
+                var route = Request.Path.Value;
+                //TODO function for spliting range
+                var tab = range.Split('-');
+                var start = int.Parse(tab[0]);
+                var end = int.Parse(tab[1]);
+                if (start == 0)
+                {
+                    start++;
+                    end++;
+                }
+                if (end > totalRecords)
+                {
+                    end = totalRecords;
+                }
+                var pageSize = (1 + end - start);
+                var page = 1 + (start / pageSize);
+                var validFilter = new PaginationFilter(page, pageSize);
       
-            var pagedData = await contents
-                    .Skip((validFilter.Page - 1) * validFilter.PageSize)
-                    .Take(validFilter.PageSize)
-                    .ToListAsync();
-            var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route);
-            return Ok(pagedResponse);
+                var pagedData = await contents
+                        .Skip((validFilter.Page - 1) * validFilter.PageSize)
+                        .Take(validFilter.PageSize)
+                        .ToListAsync();
+                var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route);
+          
+                return Ok(pagedResponse);
+            }
         }
-
-
-
-
-
-
-
 
 
 
