@@ -40,7 +40,7 @@ namespace APILibrary.Core.Extensions
             if (!string.IsNullOrEmpty(search))
             {
                 //extraction de toutes les recherches
-                var tabs = search.Split(',');
+                var tabs = search.Split('&');
                 foreach(var tab in tabs)
                 {
                     //si la recherche est sous la forme nom de l'attribut = valeur 
