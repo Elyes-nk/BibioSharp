@@ -19,16 +19,8 @@ namespace Archi.Library.Helpers
             var tab = range.Split('-');
             var start = int.Parse(tab[0]);
             var end = int.Parse(tab[1]);
-            if (start == 0)
-            {
-                start++;
-                end++;
-            }
-            if (end > totalRecords)
-            {
-                end = totalRecords;
-            }
-            var pageSize = (end - start + 1);
+            var validRange = new RangeFilter(start, end, totalRecords);
+            var pageSize = (validRange.End - validRange.Start + 1);
 
 
             //rel = "first"

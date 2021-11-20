@@ -32,20 +32,12 @@ namespace Archi.Library.Controllers
         }
 
 
-        // GET: api/{model}
+        // GET: api/Products
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string search, string asc, string desc, string type, string rating, String date, string range)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string asc, string desc, string type, string rating, String date, string range)
         {
-            var contents = from m in _context.Set<TModel>() select m;
-
-            //search
-            if (!string.IsNullOrEmpty(search))
-            {
-                contents = contents.SearchThis(search);
-            }
-
-
+            var contents = _context.Set<TModel>().AsQueryable();
 
             //tris
             if (!string.IsNullOrEmpty(asc) || !string.IsNullOrEmpty(desc))
@@ -59,16 +51,10 @@ namespace Archi.Library.Controllers
                 contents = contents.FilterThis(type, rating, date);
             }
 
-
-
-            var totalRecords = await contents.CountAsync();
-            if (totalRecords == 0)
-            {
-                return NotFound();
-            }
-            else
+            try
             {
                 //pagination
+                var totalRecords = await contents.CountAsync();
                 if (String.IsNullOrEmpty(range))
                 {
                     range = 1 + "-" + totalRecords;
@@ -78,36 +64,44 @@ namespace Archi.Library.Controllers
                 var tab = range.Split('-');
                 var start = int.Parse(tab[0]);
                 var end = int.Parse(tab[1]);
-                if (start == 0)
-                {
-                    start++;
-                    end++;
-                }
-                if (end > totalRecords)
-                {
-                    end = totalRecords;
-                }
-                var pageSize = (1 + end - start);
-                var page = 1 + (start / pageSize);
+                var validRange = new RangeFilter(start, end, totalRecords);
+                var pageSize = (1 + validRange.End - validRange.Start);
+                var page = 1 + (validRange.Start / pageSize);
                 var validFilter = new PaginationFilter(page, pageSize);
-      
+
                 var pagedData = await contents
                         .Skip((validFilter.Page - 1) * validFilter.PageSize)
                         .Take(validFilter.PageSize)
                         .ToListAsync();
                 var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route);
-          
+
                 return Ok(pagedResponse);
+            }
+            catch
+            {
+                return new List<TModel>();
             }
         }
 
 
+        // GET: api/Products/Search
+        [Route("search")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [HttpGet]
+        public virtual async Task<ActionResult<IEnumerable<dynamic>>> SearchAsync([FromQuery] string name, string type, string rating, string date)
+        {
+            var contents = _context.Set<TModel>().AsQueryable();
+
+            if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(type) || !string.IsNullOrEmpty(rating) || !string.IsNullOrEmpty(date))
+            {
+                contents = contents.SearchThis(name, type, rating, date);
+            }
+            return Ok(ToJsonList(await contents.ToListAsync()));
+        }
 
 
-
-       
-
-        // GET: api/Customers/5
+        // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TModel>> GetContent(int id)
         {
@@ -123,7 +117,8 @@ namespace Archi.Library.Controllers
 
         }
 
-        // PUT: api/Customers/5
+
+        // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContent(int id, TModel content)
@@ -154,7 +149,8 @@ namespace Archi.Library.Controllers
             return NoContent();
         }
 
-        // POST: api/Customers
+
+        // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<TModel>> PostContent(TModel content)
@@ -165,7 +161,8 @@ namespace Archi.Library.Controllers
             return CreatedAtAction("GetContent", new { id = content.ID }, content);
         }
 
-        // DELETE: api/Customers/5
+
+        // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContent(int id)
         {
@@ -174,10 +171,6 @@ namespace Archi.Library.Controllers
             {
                 return NotFound();
             }
-            //customer.Active = false;
-            //_context.Entry(customer).State = EntityState.Modified;
-
-            //_context.Entry(customer).State = EntityState.Deleted;
             _context.Set<TModel>().Remove(content);
             await _context.SaveChangesAsync();
 
@@ -188,67 +181,51 @@ namespace Archi.Library.Controllers
         {
             return _context.Set<TModel>().Any(e => e.ID == id);
         }
+      
 
-        ////TODO
-        //[Route("search")]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //[HttpGet]
-        //public virtual async Task<ActionResult<IEnumerable<dynamic>>> SearchAsync([FromQuery] string name)
-        //{
-        //    var query = _context.Set<TModel>().AsQueryable();
+        protected IEnumerable<dynamic> ToJsonList(IEnumerable<dynamic> tab)
+        {
+            var tabNew = tab.Select((x) =>
+            {
+                return ToJson(x);
+            });
+            return tabNew;
+        }
 
-        //    if (!string.IsNullOrWhiteSpace(name))
-        //    {
-        //        query = query.SearchByName(name);
-        //    }
-        //    return Ok(ToJsonList(await query.ToListAsync()));
-        //}
+        protected dynamic ToJson(dynamic item)
+        {
+            var expo = new ExpandoObject() as IDictionary<string, object>;
 
+            var collectionType = typeof(TModel);
 
-        //protected IEnumerable<dynamic> ToJsonList(IEnumerable<dynamic> tab)
-        //{
-        //    var tabNew = tab.Select((x) =>
-        //    {
-        //        return ToJson(x);
-        //    });
-        //    return tabNew;
-        //}
+            IDictionary<string, object> dico = item as IDictionary<string, object>;
+            if (dico != null)
+            {
+                foreach (var propDyn in dico)
+                {
+                    var propInTModel = collectionType.GetProperty(propDyn.Key, BindingFlags.Public |
+                            BindingFlags.IgnoreCase | BindingFlags.Instance);
 
-        //protected dynamic ToJson(dynamic item)
-        //{
-        //    var expo = new ExpandoObject() as IDictionary<string, object>;
+                    var isPresentAttribute = propInTModel.CustomAttributes
+                    .Any(x => x.AttributeType == typeof(NotJsonAttribute));
 
-        //    var collectionType = typeof(TModel);
+                    if (!isPresentAttribute)
+                        expo.Add(propDyn.Key, propDyn.Value);
+                }
+            }
+            else
+            {
+                foreach (var prop in collectionType.GetProperties())
+                {
+                    var isPresentAttribute = prop.CustomAttributes
+                    .Any(x => x.AttributeType == typeof(NotJsonAttribute));
 
-        //    IDictionary<string, object> dico = item as IDictionary<string, object>;
-        //    if (dico != null)
-        //    {
-        //        foreach (var propDyn in dico)
-        //        {
-        //            var propInTModel = collectionType.GetProperty(propDyn.Key, BindingFlags.Public |
-        //                    BindingFlags.IgnoreCase | BindingFlags.Instance);
-
-        //            var isPresentAttribute = propInTModel.CustomAttributes
-        //            .Any(x => x.AttributeType == typeof(NotJsonAttribute));
-
-        //            if (!isPresentAttribute)
-        //                expo.Add(propDyn.Key, propDyn.Value);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        foreach (var prop in collectionType.GetProperties())
-        //        {
-        //            var isPresentAttribute = prop.CustomAttributes
-        //            .Any(x => x.AttributeType == typeof(NotJsonAttribute));
-
-        //            if (!isPresentAttribute)
-        //                expo.Add(prop.Name, prop.GetValue(item));
-        //        }
-        //    }
-        //    return expo;
-        //}
+                    if (!isPresentAttribute)
+                        expo.Add(prop.Name, prop.GetValue(item));
+                }
+            }
+            return expo;
+        }
 
 
     }

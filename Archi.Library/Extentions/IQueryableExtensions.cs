@@ -27,69 +27,45 @@ namespace APILibrary.Core.Extensions
             Any
         }
 
-
-
-
-        //----------------------------------------------------------recherche------------------------------------------------------------------------------------------------------------------------
-
-        public static IQueryable<TModel> SearchThis<TModel>(this IQueryable<TModel> contents, string search ) where TModel : ModelBase
+        //--------------------------------------------------------------------Search------------------------------------------------------------------------------------------------------------------------
+        public static IQueryable<TModel> SearchThis<TModel>(this IQueryable<TModel> contents, string name, string type, string rating, string date) where TModel : ModelBase
         {
-            Regex propNameAndsearchName = new(@"\b\=\b");
-
-            IQueryable<TModel> contentSearched = null;
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(name))
             {
-                //extraction de toutes les recherches
-                var tabs = search.Split('&');
-                foreach(var tab in tabs)
-                {
-                    //si la recherche est sous la forme nom de l'attribut = valeur 
-                    if (propNameAndsearchName.IsMatch(tab))
-                    {
-                        //extraire le nom de l'attribut et ça valeur
-                        string[] types = search.Split('=');
-                        string propName = types[0];
-                        string searchName = types[1];
-
-                        //création des predicats de l'attribut égale à ça valeur 
-                        var predicate = GetCriteriaWhere<TModel>(propName, OperationExpression.Contains, searchName);
-                        //recherche du prédicat et affectation dans une variable
-                        var contentsSearch = contents.Where(predicate);
-                        if (contentSearched == null)
-                        {
-                            contentSearched = contentsSearch;
-                        }
-                        else
-                        {
-                            contentSearched = contentSearched.Concat(contentsSearch);
-                        }
-                        //affection de toute les recherche dans contents 
-                        contents = contents.Intersect(contentSearched);
-                    }
-                }
+                var propInfo = typeof(TModel).GetProperty("Name", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                var predicate = GetCriteriaWhere<TModel>(propInfo.Name, OperationExpression.Contains, name);
+                contents = contents.Where(predicate);
+            }
+            if (!string.IsNullOrEmpty(type))
+            {
+                var propInfo = typeof(TModel).GetProperty("Type", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                var predicate = GetCriteriaWhere<TModel>(propInfo.Name, OperationExpression.Contains, type);
+                contents = contents.Where(predicate);
+            }
+            if (!string.IsNullOrEmpty(rating))
+            {
+                var propInfo = typeof(TModel).GetProperty("Rating", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                var predicate = GetCriteriaWhere<TModel>(propInfo.Name, OperationExpression.Contains, rating);
+                contents = contents.Where(predicate);
+            }
+            if (!string.IsNullOrEmpty(date))
+            {
+                var propInfo = typeof(TModel).GetProperty("Date", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                var predicate = GetCriteriaWhere<TModel>(propInfo.Name, OperationExpression.Contains, date);
+                contents = contents.Where(predicate);
             }
             return contents;
         }
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-        //--------------------------------------------------------------------tris-------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------order-----------------------------------------------------------------------------------------------------------
         public static IQueryable<TModel> OrderThis<TModel>(this IQueryable<TModel> contents, string asc, string desc) where TModel : ModelBase
         {
             if (string.IsNullOrEmpty(desc))
             {
-                //affectation de la proprieté 
                 var propInfo = typeof(TModel).GetProperty(asc, BindingFlags.Public |BindingFlags.IgnoreCase | BindingFlags.Instance);
-                //si la proprieté que l'utilisateur à entrer n'existe pas
                 if (propInfo is null)
                     throw new InvalidOperationException("Please provide a valid property name");
-                //sinon faire un orderBY la propriété que l'utilisateur à entrer 
                 else
                 {
                     var keySelector = GetExpression<TModel>(propInfo.Name);
@@ -122,28 +98,16 @@ namespace APILibrary.Core.Extensions
             }
             return contents;
         }
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-//--------------------------------------------------------------------filter-----------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------filter---------------------------------------------------------------------------------------------------------
         public static IQueryable<TModel> FilterThis<TModel>(this IQueryable<TModel> contents, string type, string rating, string date) where TModel : ModelBase
         {
             Regex typeAndType = new(@"\b\,\b");
-
             Regex ratingAndRating = new(@"\b\d\,\d\b");
             Regex ratingToRating = new(@"\[\b\d\,\d\b\]");
             Regex ratingToEnd = new(@"\[\d\b\,\]");
             Regex startToRating = new(@"\[\,\d\b\]");
-
             Regex dateAndDate = new(@"\b\d{0,4}\-\d{0,2}\-\d{0,2}\,\d{0,4}\-\d{0,2}\-\d{0,2}\b");
             Regex dateToDate = new(@"\[\b\d{0,4}\-\d{0,2}\-\d{0,2}\,\d{0,4}\-\d{0,2}\-\d{0,2}\b\]");
             Regex dateToEnd = new(@"\[\b\d{0,4}\-\d{0,2}\-\d{0,2}\b\,\]");
@@ -154,28 +118,17 @@ namespace APILibrary.Core.Extensions
 
                 var propInfo = typeof(TModel).GetProperty("Type", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
                 var fieldName = propInfo.Name;
-
-                //type,type recherche de deux types en même temps
                 if (typeAndType.IsMatch(type))
                 {
                     string[] types = type.Split(',');
-
-                    //extraction des deux types
                     string one = types[0];
                     string two = types[1];
-
-                    //création des predicats de ratings égale au type one, et égale au type two
                     var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, one);
                     var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, two);
-
-                    //recherche des produits grace au prédicats
                     var contentsOne = contents.Where(predicateOne);
                     var contentsTwo = contents.Where(predicateTwo);
-
-                    //concationation des deux recherches
                     contents = contentsOne.Concat(contentsTwo);
                 }
-                //type recherche d'un seul type
                 else
                 {
                     var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, type);
@@ -187,135 +140,95 @@ namespace APILibrary.Core.Extensions
                 {
                     var propInfo = typeof(TModel).GetProperty("Rating", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
                     var fieldName = propInfo.Name;
-                    // [rating,rating] 
                     if (ratingToRating.IsMatch(rating))
                     {
-                        //extraction des deux ratings
                         var start = rating[1].ToString();
                         var end = rating[rating.Length - 2].ToString();
-
-                        //création des predicats de ratings supérieur au rating start, et inferieur au rating end
                         var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, Convert.ToInt32(start));
                         var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, Convert.ToInt32(end));
-
-                        //recherche des predicats
                         var contentsStart = contents.Where(predicateStart);
                         var contentsEnd = contents.Where(predicateEnd);
-
-                        //intersection pour avoir les rating superieur à start et inferieur à end
                         contents = contentsStart.Intersect(contentsEnd);
                     }
-                    // rating,rating 
                     else if (ratingAndRating.IsMatch(rating))
                     {
-                        //extraction des deux ratings
                         string[] ratings = rating.Split(',');
-
-                        //création des predicats de ratings égale au rating start, et égale au rating end
                         string one = ratings[0];
                         string two = ratings[1];
-
-                        //création des predicats de ratings égale au rating start, et égale au rating end
                         var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToInt32(one));
                         var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToInt32(two));
-
-                        //recherche des produits
                         var contentsOne = contents.Where(predicateOne);
                         var contentsTwo = contents.Where(predicateTwo);
-
-                        //concatination des deux produits
                         contents = contentsOne.Concat(contentsTwo);
 
                     }
-                    // [rating,] 
                     else if (ratingToEnd.IsMatch(rating))
                     {
                         var start = rating[1].ToString();
                         var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, Convert.ToInt32(start));
                         contents = contents.Where(predicateStart);
                     }
-                    // [,rating] 
                     else if (startToRating.IsMatch(rating))
                     {
                         var end = rating[rating.Length - 2].ToString();
                         var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, Convert.ToInt32(end));
                         contents = contents.Where(predicateEnd);
                     }
-                    //rating
                     else
                     {
                         var predicate = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, Convert.ToInt32(rating));
                         contents = contents.Where(predicate);
                     }
             }
-
             if (!string.IsNullOrEmpty(date))
             {
                     var propInfo = typeof(TModel).GetProperty("Date", BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
                     var fieldName = propInfo.Name;
-
-                    // [date,date] 
                     if (dateToDate.IsMatch(date))
                     {
                         var start = date.Substring(1, 10);
                         var end = date.Substring(12, 10);
-
                         string dateTimeStart = start + "T00:00:00";
                         DateTime dtStart = DateTime.ParseExact(dateTimeStart, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
                         string dateTimeEnd = end + "T00:00:00";
                         DateTime dtEnd = DateTime.ParseExact(dateTimeEnd, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
                         var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, dtStart);
                         var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, dtEnd);
-
                         var contentsOne = contents.Where(predicateStart);
                         var contentsTwo = contents.Where(predicateEnd);
                         contents = contentsOne.Intersect(contentsTwo);
                     }
-                    //date,date
                     else if (dateAndDate.IsMatch(date))
                     {
                         string[] dates = date.Split(',');
                         string one = dates[0].Substring(0, 10);
                         string two = dates[1].Substring(0,10);
-
                         string dateTimeOne = one + "T00:00:00";
                         DateTime dtOne = DateTime.ParseExact(dateTimeOne, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
                         string dateTimeTwo = two + "T00:00:00";
                         DateTime dtTwo = DateTime.ParseExact(dateTimeTwo, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
                         var predicateOne = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dtOne);
                         var predicateTwo = GetCriteriaWhere<TModel>(fieldName, OperationExpression.Equals, dtTwo);
-
                         var contentsOne = contents.Where(predicateOne);
                         var contentsTwo = contents.Where(predicateTwo);
                         contents = contentsOne.Concat(contentsTwo);
                     }
-                    //[date,]
                     else if (dateToEnd.IsMatch(date))
                     {
                         var start = date.Substring(1, 10);
-
                         string dateTimeStart = start + "T00:00:00";
                         DateTime dtStart = DateTime.ParseExact(dateTimeStart, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
                         var predicateStart = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MayorEquals, dtStart);
                         contents = contents.Where(predicateStart);
                     }
-                    //[,date]
                     else if (startToDate.IsMatch(date))
                     {
                         var end = date.Substring(2, 10);
-
                         string dateTimeEnd = end + "T00:00:00";
                         DateTime dtEnd = DateTime.ParseExact(dateTimeEnd, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
                         var predicateEnd = GetCriteriaWhere<TModel>(fieldName, OperationExpression.MinorEquals, dtEnd);
                         contents = contents.Where(predicateEnd);
                     }
-                    //date
                     else
                     {
                         string dateTime = date+"T00:00:00";
@@ -326,20 +239,15 @@ namespace APILibrary.Core.Extensions
             }
             return contents;
         }
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-        //FONCTION générique qui permet la recherche par apport au nom de l'attribut et ça valeur
-        //ainsi que l'operateur logique correspondant qui peut être (supérieur, inférieur, égale.. etc)
+        //DOCUMENTAION for GetCriteriaWhere()
+        //https://www.codementor.io/@juliandambrosio/how-to-use-expression-trees-to-build-dynamic-queries-c-xyk1l2l82
+        
         public static Expression<Func<TModel, bool>> GetCriteriaWhere<TModel>(string fieldName, OperationExpression selectedOperator, object fieldValue) where TModel : ModelBase
         {
 
             var propInfo = typeof(TModel).GetProperty(fieldName, BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
-
             var parameter = Expression.Parameter(typeof(TModel), "x");
             var expressionParameter = GetMemberExpression<TModel>(parameter, fieldName);
             if (propInfo != null && fieldValue != null)
@@ -421,22 +329,5 @@ namespace APILibrary.Core.Extensions
         }
     }
 
-    ////SearchByName(IQueyable<TModel> query, string name)
-    //public static IQueryable<TModel> SearchByName<TModel>(this IQueryable<TModel> query, string name) where TModel : ModelBase
-    //{
-    //    var propsInfo = typeof(TModel).GetProperties();
-    //    var result = query;
-    //    foreach (var prop in propsInfo)
-    //    {
-    //        if (prop.PropertyType == typeof(string))
-    //        {
-    //            var predicate = GetCriteriaWhere<TModel>(prop.Name, OperationExpression.Contains, name);
-    //            if (query.Where(predicate).Count() > 0)
-    //            {
-    //                result = result.Where(predicate);
-    //            }
-    //        }
-    //    }
-    //    return result;
-    //}
+    
 }

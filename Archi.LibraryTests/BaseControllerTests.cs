@@ -27,7 +27,7 @@ namespace Archi.LibraryTests
         [Test]
         public async Task GetAll()
         {
-            var actionResult = await _controllerP.GetAll("", "", "", "", "", "", "");
+            var actionResult = await _controllerP.GetAll("", "", "", "", "", "");
             var result = actionResult.Result as ObjectResult;
             var values = ((IEnumerable<object>)(result).Value);
 
