@@ -15,10 +15,34 @@ namespace Archi.Library.Services
             _baseUri = baseUri;
         }
 
-        public Uri GetPageUri(String range, string route)
+        public Uri GetPageUri(string range, string route, string asc, string desc, string type, string rating, string date)
         {
             var _enpointUri = new Uri(string.Concat(_baseUri, route));
+
+
             var modifiedUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "range", range);
+            if (!string.IsNullOrEmpty(asc))
+            {
+                modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "asc", asc);
+            }
+            if (!string.IsNullOrEmpty(desc))
+            {
+                modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "desc", desc);
+            }
+            if (!string.IsNullOrEmpty(type))
+            {
+                modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "type", type);
+            }
+            if (!string.IsNullOrEmpty(rating))
+            {
+                modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "rating", rating);
+            }
+            if (!string.IsNullOrEmpty(date))
+            {
+                modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "date", date);
+            }
+
+
             return new Uri(modifiedUri);
         }
 

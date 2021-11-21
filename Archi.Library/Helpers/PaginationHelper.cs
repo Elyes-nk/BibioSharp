@@ -7,7 +7,7 @@ namespace Archi.Library.Helpers
 {
     public class PaginationHelper
     {
-        public static PagedResponse<List<T>> CreatePagedResponse<T>(List<T> pagedData, String range, PaginationFilter validFilter, int totalRecords, IUriService uriService, string route)
+        public static PagedResponse<List<T>> CreatePagedResponse<T>(List<T> pagedData, String range, PaginationFilter validFilter, int totalRecords, IUriService uriService, string route, string asc, string desc, string type, string rating, string date)
         {
             var reponse = new PagedResponse<List<T>>(pagedData, range, validFilter.Page, validFilter.PageSize);
 
@@ -27,12 +27,12 @@ namespace Archi.Library.Helpers
             var firstStart = 1;
             var firstEnd = (firstStart + pageSize - 1);
             var first = firstStart + "-" + firstEnd;
-            reponse.First = uriService.GetPageUri(first, route);
+            reponse.First = uriService.GetPageUri(first, route, asc, desc, type, rating, date);
 
 
             //rel = "next"
-            var nextStart = (start + pageSize);
-            var nextEnd = (end + pageSize);
+            var nextStart = (validRange.Start + pageSize);
+            var nextEnd = (validRange.End + pageSize);
             if (nextEnd > totalRecords)
             {
                 nextEnd = totalRecords;
@@ -40,24 +40,24 @@ namespace Archi.Library.Helpers
             string next = nextStart+ "-" +nextEnd;
             reponse.Next =
                 nextStart >= 1 && nextStart <= totalRecords
-                ? uriService.GetPageUri(next, route)
+                ? uriService.GetPageUri(next, route, asc, desc, type, rating, date)
                 : null;
 
 
             //rel = "prev"
-            var prevStart = (start - pageSize);
-            var prevEnd = (end - pageSize);
+            var prevStart = (validRange.Start - pageSize);
+            var prevEnd = (validRange.End - pageSize);
             var prev = prevStart + "-" + prevEnd;
             reponse.Prev =
                 prevStart - 1 >= 1 && prevEnd <= totalRecords
-                ? uriService.GetPageUri(prev, route)
+                ? uriService.GetPageUri(prev, route, asc, desc, type, rating, date)
                 : null;
 
 
             //rel = "last"
             var lastStart = pageSize * (roundedTotalPages - 1) + 1;
             string last = lastStart + "-" + totalRecords;       
-            reponse.Last = uriService.GetPageUri(last, route);
+            reponse.Last = uriService.GetPageUri(last, route, asc, desc, type, rating, date);
 
 
             reponse.TotalPages = roundedTotalPages;

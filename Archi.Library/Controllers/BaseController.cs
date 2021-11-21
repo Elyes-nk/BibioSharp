@@ -35,11 +35,13 @@ namespace Archi.Library.Controllers
         // GET: api/Products
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string asc, string desc, string type, string rating, String date, string range)
+        public async Task<ActionResult<IEnumerable<TModel>>> GetAll(string range, string asc, string desc, string type, string rating, string date)
         {
             var contents = _context.Set<TModel>().AsQueryable();
+            //var contents = from m in _context.Set<TModel>() select m;
 
-            //tris
+
+            //triss
             if (!string.IsNullOrEmpty(asc) || !string.IsNullOrEmpty(desc))
             {
                 contents = contents.OrderThis(asc, desc);
@@ -51,10 +53,10 @@ namespace Archi.Library.Controllers
                 contents = contents.FilterThis(type, rating, date);
             }
 
-            try
-            {
-                //pagination
-                var totalRecords = await contents.CountAsync();
+
+            //pagination
+            var totalRecords = await contents.CountAsync();
+            if(totalRecords > 0) { 
                 if (String.IsNullOrEmpty(range))
                 {
                     range = 1 + "-" + totalRecords;
@@ -73,19 +75,19 @@ namespace Archi.Library.Controllers
                         .Skip((validFilter.Page - 1) * validFilter.PageSize)
                         .Take(validFilter.PageSize)
                         .ToListAsync();
-                var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedResponse<TModel>(pagedData, range, validFilter, totalRecords, _uriService, route, asc, desc, type, rating, date);
 
                 return Ok(pagedResponse);
             }
-            catch
+            else
             {
                 return new List<TModel>();
             }
         }
 
 
-        // GET: api/Products/Search
-        [Route("search")]
+    // GET: api/Products/Search
+    [Route("search")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [HttpGet]
@@ -195,33 +197,23 @@ namespace Archi.Library.Controllers
         protected dynamic ToJson(dynamic item)
         {
             var expo = new ExpandoObject() as IDictionary<string, object>;
-
             var collectionType = typeof(TModel);
-
             IDictionary<string, object> dico = item as IDictionary<string, object>;
             if (dico != null)
             {
                 foreach (var propDyn in dico)
                 {
-                    var propInTModel = collectionType.GetProperty(propDyn.Key, BindingFlags.Public |
-                            BindingFlags.IgnoreCase | BindingFlags.Instance);
-
-                    var isPresentAttribute = propInTModel.CustomAttributes
-                    .Any(x => x.AttributeType == typeof(NotJsonAttribute));
-
-                    if (!isPresentAttribute)
-                        expo.Add(propDyn.Key, propDyn.Value);
+                    var propInTModel = collectionType.GetProperty(propDyn.Key, BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance);
+                    var isPresentAttribute = propInTModel.CustomAttributes.Any(x => x.AttributeType == typeof(NotJsonAttribute));
+                    if (!isPresentAttribute) expo.Add(propDyn.Key, propDyn.Value);
                 }
             }
             else
             {
                 foreach (var prop in collectionType.GetProperties())
                 {
-                    var isPresentAttribute = prop.CustomAttributes
-                    .Any(x => x.AttributeType == typeof(NotJsonAttribute));
-
-                    if (!isPresentAttribute)
-                        expo.Add(prop.Name, prop.GetValue(item));
+                    var isPresentAttribute = prop.CustomAttributes.Any(x => x.AttributeType == typeof(NotJsonAttribute));
+                    if (!isPresentAttribute) expo.Add(prop.Name, prop.GetValue(item));
                 }
             }
             return expo;
