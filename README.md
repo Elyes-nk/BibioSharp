@@ -1,6 +1,4 @@
-# ArchiLogTp
-
-#### Projet Architecture logiciel
+# Projet Architecture logiciel
 
 Application API web en micro services. Elle utilise une bibliothèque qui automatise les standards d'une API REST.
 
