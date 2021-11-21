@@ -1,6 +1,13 @@
+# Mastère 1 développement web 2021/2022
 # Projet Architecture logiciel
 
-Application API web en micro services. Elle utilise une bibliothèque qui automatise les standards d'une API REST.
+Application API web en micro services. Qui utilise une bibliothèque qui automatise les standards d'une API REST.
+
+# Groupe 4 :
+* NAIT KACI Elyes
+* KECHIR Kamelia 
+* JUMPERTZ Swann
+* Derfoufi Malika
 
 #### La base
 * Librairie impléte par défaut un CRUD (Create, Read, Update, Delete),  
