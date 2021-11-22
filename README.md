@@ -7,7 +7,7 @@ Application API web en micro services. Qui utilise une bibliothèque qui automat
 * NAIT KACI Elyes
 * KECHIR Kamelia 
 * JUMPERTZ Swann
-* Derfoufi Malika
+* DERFOUFI Malika
 
 #### La base
 * Librairie impléte par défaut un CRUD (Create, Read, Update, Delete),  
@@ -15,7 +15,7 @@ Application API web en micro services. Qui utilise une bibliothèque qui automat
 
 #### Pagination
 La pagination en utilisant le paramètre de requête ?range=0-25 et les Header standards HTTP pour la réponse: Content-Range & Accept-Range. Voici comment les links sont présent dans le header de retour: 
-* rel="first" : https://xxxxx.com/catalog/v1/products/orders?range=0-7; 
+* rel="first" : https://xxxxx.com/catalog/v1/products/orders?range=1-7; 
 * rel="prev" : https://xxxxx.com/catalog/v1/products/orders?range=40-47; 
 * rel="next" : https://xxxxx.com/catalog/v1/products/orders?range=56-64; 
 * rel="last" : https://api.xxxxx.com/catalog/v1/products/orders?range=968-975; 
